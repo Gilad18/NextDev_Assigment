@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
   userName: {
     type: String,
     required: true,
-    unique: false,
+    unique: true,
   },
   email: {
     type: String,
@@ -16,6 +16,16 @@ const userSchema = mongoose.Schema({
     validate(value) {
       if (!validator.isEmail(value)) {
         throw new Error("invalid Adress");
+      }
+    },
+  },
+  password: {
+    type: String,
+    required: true,
+    unique: true,
+    validate(value) {
+      if (value.length < 5) {
+        throw new Error("Too short (Minimun 5 chars)");
       }
     },
   },
@@ -53,6 +63,32 @@ const userSchema = mongoose.Schema({
     },
   ],
 });
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+
+  next();
+});
+
+userSchema.statics.findByCredentials = async (userName, paswword) => {
+  const user = await userModel.findOne({ userName: userName });
+
+  if (!user) {
+    throw new Error("Unable to login");
+  }
+
+  const isMatch = await bcrypt.compare(paswword, user.password);
+
+  if (!isMatch) {
+    throw new Error("Incorrect Inputs");
+  }
+
+  return user;
+};
 
 userSchema.methods.generateToken = async function () {
   const user = this;

@@ -17,14 +17,8 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { createBrowserHistory } from "history";
-import {
-  Router,
-  Route,
-  Switch,
-  Redirect,
-  BrowserRouter,
-} from "react-router-dom";
+// import { createBrowserHistory } from "history";
+import { Route, BrowserRouter } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
@@ -32,15 +26,21 @@ import RTL from "layouts/RTL.js";
 import { Login } from "./views/Login/Login";
 import { ProtectedRoute } from "views/Login/protectedRoute";
 
+// Redux
+import { store } from "./Redux/Store";
+import { Provider } from "react-redux";
+
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 
-const hist = createBrowserHistory();
+// const hist = createBrowserHistory();
 
 ReactDOM.render(
-  <BrowserRouter history={hist}>
-    <Route path="/" exact component={Login} />
-    <ProtectedRoute path="/admin" component={Admin} />
-    <ProtectedRoute path="/rtl" component={RTL} />
-  </BrowserRouter>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <Route path="/" exact component={Login} />
+      <ProtectedRoute path="/admin" component={Admin} />
+      <ProtectedRoute path="/rtl" component={RTL} />
+    </BrowserRouter>
+  </Provider>,
   document.getElementById("root")
 );

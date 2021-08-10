@@ -1,8 +1,16 @@
 const Users = require("../model/user.model");
 
 const createNewUser = async (req, res) => {
-  const { userName, email, firstName, lastName, city, country, postalCode } =
-    req.body;
+  const {
+    userName,
+    email,
+    firstName,
+    lastName,
+    city,
+    country,
+    postalCode,
+    password,
+  } = req.body;
   const newUser = new Users({
     userName,
     email,
@@ -11,6 +19,7 @@ const createNewUser = async (req, res) => {
     city,
     country,
     postalCode,
+    password,
   });
 
   try {
@@ -25,12 +34,9 @@ const createNewUser = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { userName, email } = req.body;
+  const { userName, password } = req.body;
   try {
-    const user = await Users.findOne({ userName: userName, email: email });
-    if (!user) {
-      throw new Error("Unable to login");
-    }
+    const user = await Users.findByCredentials(userName, password);
     await user.generateToken();
     res.status(200).json({ success: "You are now logged in", user });
   } catch (err) {

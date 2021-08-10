@@ -4,10 +4,29 @@ import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import auth from "../auth";
+import Button from "../../../components/CustomButtons/Button";
+import { useDispatch } from "react-redux";
+import { newUser } from "Redux/actions";
 
-export default function LoginToAccount() {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+export default function LoginToAccount({ props }) {
+  const dispatch = useDispatch();
+  const [userInputs, setUserInputs] = useState({ userName: "", password: "" });
+
+  const handleInputChange = (property, value) => {
+    setUserInputs({
+      ...userInputs,
+      [property]: value,
+    });
+  };
+
+  const handleSubmit = () => {
+    // server call API to clog in if success do the rest of the function, if not -> return after error message
+    dispatch(newUser(userInputs));
+    auth.login(() => {
+      props.history.push("/admin");
+    });
+  };
 
   return (
     <>
@@ -28,7 +47,9 @@ export default function LoginToAccount() {
                   inputProps={{
                     disabled: false,
                   }}
-                  onChange={(e) => setUserName(e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("userName", e.target.value)
+                  }
                 />
               </GridItem>
               <GridItem xs={12} sm={12} md={5}>
@@ -42,11 +63,16 @@ export default function LoginToAccount() {
                     disabled: false,
                     type: "password",
                   }}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("password", e.target.value)
+                  }
                 />
               </GridItem>
             </GridContainer>
           </CardBody>
+          <Button color="primary" round onClick={handleSubmit}>
+            Log In
+          </Button>
         </GridItem>
       </GridContainer>
     </>

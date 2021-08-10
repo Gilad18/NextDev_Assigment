@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Button from "components/CustomButtons/Button.js";
-import auth from "./auth";
 import CreateAccount from "./CreateAccount/CreateAccount";
 import LoginToAccount from "./LoginToAccount/LoginToAccount";
 import GridItem from "components/Grid/GridItem.js";
@@ -26,32 +24,21 @@ export const Login = (props) => {
       <GridItem>
         {!hasAnAccount ? (
           <>
-            <CreateAccount />
             <p>
               Alreday have an account? Click{" "}
-              <a onClick={() => setHasAnAccount(!hasAnAccount)}>HERE</a>
+              <span onClick={() => setHasAnAccount(!hasAnAccount)}>HERE</span>
             </p>
+            <CreateAccount props={props} />
           </>
         ) : (
           <>
-            <LoginToAccount />
             <p onClick={() => setHasAnAccount(!hasAnAccount)}>
               Don't have an account yet? Click{" "}
-              <a onClick={() => setHasAnAccount(!hasAnAccount)}>HERE</a>
+              <span onClick={() => setHasAnAccount(!hasAnAccount)}>HERE</span>
             </p>
+            <LoginToAccount props={props} />
           </>
         )}
-        <Button
-          color="primary"
-          round
-          onClick={() => {
-            auth.login(() => {
-              props.history.push("/admin");
-            });
-          }}
-        >
-          LOG IN
-        </Button>
       </GridItem>
     </div>
   );
