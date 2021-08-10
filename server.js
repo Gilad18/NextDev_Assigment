@@ -8,9 +8,9 @@ const app = express();
 const path = require("path");
 
 app.use(cors());
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
-const serverRoute = require("./server/routes/routes");
+const serverRoute = require("./backend/routes/routes");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
