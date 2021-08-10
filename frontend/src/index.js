@@ -18,23 +18,29 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import {
+  Router,
+  Route,
+  Switch,
+  Redirect,
+  BrowserRouter,
+} from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
 import RTL from "layouts/RTL.js";
+import { Login } from "./views/Login/Login";
+import { ProtectedRoute } from "views/Login/protectedRoute";
 
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 
 const hist = createBrowserHistory();
 
 ReactDOM.render(
-  <Router history={hist}>
-    <Switch>
-      <Route path="/admin" component={Admin} />
-      <Route path="/rtl" component={RTL} />
-      <Redirect from="/" to="/admin" />
-    </Switch>
-  </Router>,
+  <BrowserRouter history={hist}>
+    <Route path="/" exact component={Login} />
+    <ProtectedRoute path="/admin" component={Admin} />
+    <ProtectedRoute path="/rtl" component={RTL} />
+  </BrowserRouter>,
   document.getElementById("root")
 );
