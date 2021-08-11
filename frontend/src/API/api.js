@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5001/server/api",
+  baseURL: "https://nextdev-gilad.herokuapp.com/server/api",
 });
 
 export default API;
