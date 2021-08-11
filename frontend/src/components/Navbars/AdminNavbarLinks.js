@@ -32,6 +32,7 @@ export default function AdminNavbarLinks() {
   const token = localStorage.getItem("token");
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
+
   const handleClickNotification = (event) => {
     if (openNotification && openNotification.contains(event.target)) {
       setOpenNotification(null);
@@ -56,7 +57,7 @@ export default function AdminNavbarLinks() {
   const handleLogout = async () => {
     setOpenProfile(null);
     try {
-      const attemplogout = await API("/logout", {
+      await API("/logout", {
         method: "post",
         headers: {
           Authorization: `Bearer ${token}`,

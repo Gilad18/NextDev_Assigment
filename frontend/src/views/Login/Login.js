@@ -21,6 +21,7 @@ const useStyles = makeStyles(styles);
 
 export const Login = (props) => {
   const classes = useStyles();
+  console.log(props);
 
   const [hasAnAccount, setHasAnAccount] = useState(false);
   return (

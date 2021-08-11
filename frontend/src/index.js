@@ -18,7 +18,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
-import { Route, BrowserRouter } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
@@ -33,15 +33,15 @@ import { Provider } from "react-redux";
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 import "react-toastify/dist/ReactToastify.css";
 
-const hist = createBrowserHistory();
+const history = createBrowserHistory();
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router history={history}>
       <Route path="/" exact component={Login} />
       <ProtectedRoute path="/admin" component={Admin} />
       <ProtectedRoute path="/rtl" component={RTL} />
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById("root")
 );
