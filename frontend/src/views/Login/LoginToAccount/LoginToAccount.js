@@ -11,13 +11,28 @@ import { newUser } from "Redux/actions";
 import API from "API/api";
 import { toast } from "react-toastify";
 import { notification } from "../../Toastify/toastify";
+import { makeStyles } from "@material-ui/core/styles";
+
+const styles = {
+  pageContainer: {
+    position: "absolute",
+    left: "40vw",
+    top: "20vh",
+    textAlign: "center",
+  },
+};
+
+const useStyles = makeStyles(styles);
 
 export default function LoginToAccount({ props }) {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [userInputs, setUserInputs] = useState({ userName: "", password: "" });
+  const [errorMessage, setErrorMessage] = useState("");
   toast.configure();
 
   const handleInputChange = (property, value) => {
+    setErrorMessage("");
     setUserInputs({
       ...userInputs,
       [property]: value,
@@ -42,21 +57,20 @@ export default function LoginToAccount({ props }) {
         });
       }
     } catch (err) {
-      console.log(err);
-      //error message
+      setErrorMessage(err.response.data);
     }
   };
 
   return (
-    <>
-      <GridContainer alignItems="center">
+    <div className={classes.pageContainer}>
+      <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <CardHeader color="primary">
             <h4>Login To Your Account</h4>
           </CardHeader>
           <CardBody>
             <GridContainer>
-              <GridItem xs={12} sm={12} md={5}>
+              <GridItem xs={12} sm={12} md={6}>
                 <CustomInput
                   labelText="User Name"
                   id="userName"
@@ -71,7 +85,7 @@ export default function LoginToAccount({ props }) {
                   }
                 />
               </GridItem>
-              <GridItem xs={12} sm={12} md={5}>
+              <GridItem xs={12} sm={12} md={6}>
                 <CustomInput
                   labelText="Password"
                   id="password"
@@ -92,8 +106,9 @@ export default function LoginToAccount({ props }) {
           <Button color="primary" round onClick={handleSubmit}>
             Log In
           </Button>
+          <p>{errorMessage}</p>
         </GridItem>
       </GridContainer>
-    </>
+    </div>
   );
 }

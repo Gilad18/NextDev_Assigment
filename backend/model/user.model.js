@@ -41,12 +41,12 @@ const userSchema = mongoose.Schema({
   },
   city: {
     type: String,
-    required: true,
+    required: false,
     unique: false,
   },
   country: {
     type: String,
-    required: true,
+    required: false,
     unique: false,
   },
   postalCode: {

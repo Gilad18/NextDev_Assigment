@@ -51,6 +51,10 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseProfile = async () => {
     setOpenProfile(null);
+  };
+
+  const handleLogout = async () => {
+    setOpenProfile(null);
     try {
       const attemplogout = await API("/logout", {
         method: "post",
@@ -226,7 +230,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={handleLogout}
                       className={classes.dropdownItem}
                     >
                       Logout

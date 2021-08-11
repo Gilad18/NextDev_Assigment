@@ -11,6 +11,10 @@ const styles = {
     display: "flex",
     justifyContent: "center",
   },
+  textBold: {
+    fontWeight: "bold",
+    color: "#9c27b0",
+  },
 };
 
 const useStyles = makeStyles(styles);
@@ -26,7 +30,12 @@ export const Login = (props) => {
           <>
             <p>
               Alreday have an account? Click{" "}
-              <span onClick={() => setHasAnAccount(!hasAnAccount)}>HERE</span>
+              <span
+                className={classes.textBold}
+                onClick={() => setHasAnAccount(!hasAnAccount)}
+              >
+                HERE
+              </span>
             </p>
             <CreateAccount props={props} />
           </>
@@ -34,7 +43,12 @@ export const Login = (props) => {
           <>
             <p onClick={() => setHasAnAccount(!hasAnAccount)}>
               Don't have an account yet? Click{" "}
-              <span onClick={() => setHasAnAccount(!hasAnAccount)}>HERE</span>
+              <span
+                className={classes.textBold}
+                onClick={() => setHasAnAccount(!hasAnAccount)}
+              >
+                HERE
+              </span>
             </p>
             <LoginToAccount props={props} />
           </>

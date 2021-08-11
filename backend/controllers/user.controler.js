@@ -44,7 +44,7 @@ const login = async (req, res) => {
     const token = await user.generateToken();
     res.status(200).json({ success: "You are now logged in", user, token });
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 };
 
@@ -58,7 +58,7 @@ const logout = async (req, res) => {
       .status(200)
       .json({ success: "You are now logged out, we hope to see you soon" });
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).json(err.message);
   }
 };
 
