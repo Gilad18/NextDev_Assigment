@@ -51,7 +51,7 @@ const userSchema = mongoose.Schema({
   },
   postalCode: {
     type: String,
-    required: true,
+    required: false,
     unique: false,
   },
   tokens: [

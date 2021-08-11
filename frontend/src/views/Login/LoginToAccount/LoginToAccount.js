@@ -8,10 +8,14 @@ import auth from "../auth";
 import Button from "../../../components/CustomButtons/Button";
 import { useDispatch } from "react-redux";
 import { newUser } from "Redux/actions";
+import API from "API/api";
+import { toast } from "react-toastify";
+import { notification } from "../../Toastify/toastify";
 
 export default function LoginToAccount({ props }) {
   const dispatch = useDispatch();
   const [userInputs, setUserInputs] = useState({ userName: "", password: "" });
+  toast.configure();
 
   const handleInputChange = (property, value) => {
     setUserInputs({
@@ -20,12 +24,27 @@ export default function LoginToAccount({ props }) {
     });
   };
 
-  const handleSubmit = () => {
-    // server call API to clog in if success do the rest of the function, if not -> return after error message
-    dispatch(newUser(userInputs));
-    auth.login(() => {
-      props.history.push("/admin");
-    });
+  const handleSubmit = async () => {
+    try {
+      const attempLogin = await API("/login", {
+        method: "post",
+        data: { ...userInputs },
+      });
+      if (attempLogin.data) {
+        notification(
+          `Hey ${attempLogin.data.user.firstName}, great to see you again`,
+          toast.POSITION.TOP_CENTER
+        );
+        dispatch(newUser(attempLogin.data.user));
+        localStorage.setItem("token", attempLogin.data.token);
+        auth.login(() => {
+          props.history.push("/admin");
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      //error message
+    }
   };
 
   return (

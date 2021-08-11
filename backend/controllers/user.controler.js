@@ -10,7 +10,11 @@ const createNewUser = async (req, res) => {
     country,
     postalCode,
     password,
+    passwordConfirm,
   } = req.body;
+
+  if (password !== passwordConfirm) throw new Error("pasword are not matched");
+
   const newUser = new Users({
     userName,
     email,
@@ -23,11 +27,11 @@ const createNewUser = async (req, res) => {
   });
 
   try {
-    await newUser.generateToken();
+    const token = await newUser.generateToken();
     await newUser.save();
     res
       .status(200)
-      .json({ success: "New User was Succesfully created", newUser });
+      .json({ success: "New User was Succesfully created", newUser, token });
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -37,8 +41,8 @@ const login = async (req, res) => {
   const { userName, password } = req.body;
   try {
     const user = await Users.findByCredentials(userName, password);
-    await user.generateToken();
-    res.status(200).json({ success: "You are now logged in", user });
+    const token = await user.generateToken();
+    res.status(200).json({ success: "You are now logged in", user, token });
   } catch (err) {
     res.status(400).send(err.message);
   }

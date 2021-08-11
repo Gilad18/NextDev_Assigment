@@ -20,6 +20,7 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import auth from "../../views/Login/auth";
 import { createBrowserHistory } from "history";
+import API from "../../API/api";
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
@@ -28,6 +29,7 @@ const useStyles = makeStyles(styles);
 export default function AdminNavbarLinks() {
   const classes = useStyles();
   const history = createBrowserHistory();
+  const token = localStorage.getItem("token");
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
   const handleClickNotification = (event) => {
@@ -47,10 +49,22 @@ export default function AdminNavbarLinks() {
       setOpenProfile(event.currentTarget);
     }
   };
-  const handleCloseProfile = () => {
+  const handleCloseProfile = async () => {
     setOpenProfile(null);
-    //call API to logout
-    auth.logout(() => history.push("/"));
+    try {
+      const attemplogout = await API("/logout", {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      //toastify with the succes message from the JSON
+      localStorage.setItem("token", "");
+      auth.logout(() => history.push("/"));
+    }
   };
   return (
     <div>

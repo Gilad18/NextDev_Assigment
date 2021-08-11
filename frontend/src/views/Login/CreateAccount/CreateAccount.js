@@ -8,6 +8,9 @@ import auth from "../auth";
 import Button from "../../../components/CustomButtons/Button";
 import { useDispatch } from "react-redux";
 import { newUser } from "Redux/actions";
+import API from "API/api";
+import { toast } from "react-toastify";
+import { notification } from "../../Toastify/toastify";
 
 export default function CreateAccount({ props }) {
   const dispatch = useDispatch();
@@ -25,6 +28,8 @@ export default function CreateAccount({ props }) {
 
   const [errorMessage, setErrorMessage] = useState("");
 
+  toast.configure();
+
   const handleInputChange = (property, value) => {
     setUserInputs({
       ...userInputs,
@@ -32,14 +37,28 @@ export default function CreateAccount({ props }) {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (userInputs.password !== userInputs.passwordConfirm)
       return setErrorMessage("Passwords are not matched");
-    // server call API to create new user if success do the rest of the function, if not -> return after error message
-    dispatch(newUser(userInputs));
-    auth.login(() => {
-      props.history.push("/admin");
-    });
+    try {
+      const newAccount = await API("/newUser", {
+        method: "post",
+        data: { ...userInputs },
+      });
+      if (newAccount.data) {
+        notification(
+          `Welcome aboard ${newAccount.data.newUser.firstName}, We so happy to have you here!`,
+          toast.POSITION.TOP_CENTER
+        );
+        dispatch(newUser(newAccount.data.newUser));
+        localStorage.setItem("token", newAccount.data.token);
+        auth.login(() => {
+          props.history.push("/admin");
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

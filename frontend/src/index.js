@@ -17,7 +17,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-// import { createBrowserHistory } from "history";
+import { createBrowserHistory } from "history";
 import { Route, BrowserRouter } from "react-router-dom";
 
 // core components
@@ -31,8 +31,9 @@ import { store } from "./Redux/Store";
 import { Provider } from "react-redux";
 
 import "assets/css/material-dashboard-react.css?v=1.8.0";
+import "react-toastify/dist/ReactToastify.css";
 
-// const hist = createBrowserHistory();
+const hist = createBrowserHistory();
 
 ReactDOM.render(
   <Provider store={store}>

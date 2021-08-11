@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -12,7 +12,11 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+import { useSelector, useDispatch } from "react-redux";
+import API from "../../API/api";
+import { newUser } from "../../Redux/actions";
+import { toast } from "react-toastify";
+import { notification } from "views/Toastify/toastify";
 import avatar from "assets/img/faces/marc.jpg";
 
 const styles = {
@@ -21,7 +25,7 @@ const styles = {
     margin: "0",
     fontSize: "14px",
     marginTop: "0",
-    marginBottom: "0"
+    marginBottom: "0",
   },
   cardTitleWhite: {
     color: "#FFFFFF",
@@ -30,14 +34,62 @@ const styles = {
     fontWeight: "300",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
-    textDecoration: "none"
-  }
+    textDecoration: "none",
+  },
 };
 
 const useStyles = makeStyles(styles);
 
 export default function UserProfile() {
   const classes = useStyles();
+  const state = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [userDetails, setUserDetails] = useState({ ...state });
+  const token = localStorage.getItem("token");
+  toast.configure();
+
+  const handleInputChange = (property, value) => {
+    setUserDetails({
+      ...userDetails,
+      [property]: value,
+    });
+  };
+
+  const handleUpdate = async () => {
+    const {
+      userName,
+      email,
+      firstName,
+      lastName,
+      city,
+      country,
+      postalCode,
+    } = userDetails;
+    try {
+      const attempUpdate = await API("/update", {
+        method: "put",
+        data: {
+          userName,
+          email,
+          firstName,
+          lastName,
+          city,
+          country,
+          postalCode,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch(newUser(attempUpdate.data.updatedUser));
+      notification(
+        `Details were succesfuly updated!`,
+        toast.POSITION.TOP_CENTER
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div>
       <GridContainer>
@@ -54,10 +106,10 @@ export default function UserProfile() {
                     labelText="Company (disabled)"
                     id="company-disabled"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
-                      disabled: true
+                      disabled: true,
                     }}
                   />
                 </GridItem>
@@ -66,8 +118,14 @@ export default function UserProfile() {
                     labelText="Username"
                     id="username"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      value: userDetails.userName,
+                    }}
+                    onChange={(e) =>
+                      handleInputChange("userName", e.target.value)
+                    }
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
@@ -75,8 +133,12 @@ export default function UserProfile() {
                     labelText="Email address"
                     id="email-address"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      value: userDetails.email,
+                    }}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                   />
                 </GridItem>
               </GridContainer>
@@ -86,8 +148,14 @@ export default function UserProfile() {
                     labelText="First Name"
                     id="first-name"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      value: userDetails.firstName,
+                    }}
+                    onChange={(e) =>
+                      handleInputChange("firstName", e.target.value)
+                    }
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
@@ -95,8 +163,14 @@ export default function UserProfile() {
                     labelText="Last Name"
                     id="last-name"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      value: userDetails.lastName,
+                    }}
+                    onChange={(e) =>
+                      handleInputChange("lastName", e.target.value)
+                    }
                   />
                 </GridItem>
               </GridContainer>
@@ -106,8 +180,12 @@ export default function UserProfile() {
                     labelText="City"
                     id="city"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      value: userDetails.city,
+                    }}
+                    onChange={(e) => handleInputChange("city", e.target.value)}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
@@ -115,8 +193,14 @@ export default function UserProfile() {
                     labelText="Country"
                     id="country"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      value: userDetails.country,
+                    }}
+                    onChange={(e) =>
+                      handleInputChange("country", e.target.value)
+                    }
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
@@ -124,8 +208,14 @@ export default function UserProfile() {
                     labelText="Postal Code"
                     id="postal-code"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      value: userDetails.postalCode,
+                    }}
+                    onChange={(e) =>
+                      handleInputChange("postalCode", e.target.value)
+                    }
                   />
                 </GridItem>
               </GridContainer>
@@ -136,25 +226,27 @@ export default function UserProfile() {
                     labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
                     id="about-me"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
                       multiline: true,
-                      rows: 5
+                      rows: 5,
                     }}
                   />
                 </GridItem>
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+              <Button color="primary" onClick={handleUpdate}>
+                Update Profile
+              </Button>
             </CardFooter>
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card profile>
             <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
+              <a href="#pablo" onClick={(e) => e.preventDefault()}>
                 <img src={avatar} alt="..." />
               </a>
             </CardAvatar>
