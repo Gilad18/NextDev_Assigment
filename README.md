@@ -24,7 +24,7 @@ Client-Side :
 2. Building UI for Login and New account using the app custom components
 3. Configuring Redux store and Redux reduces for the state management
 4. Syncing the backend with the front using Axios
-5. Handling all the logic of the HTTP requests.
+5. Handling all the logic of the HTTP requests on the client side.
 6. Delivering UX with successful feedbacks by Toasitfy and error messages to the UI
 7. Improving Styling
 
@@ -38,12 +38,12 @@ Overall the task was a lot of fun to do, most of the work I already did in forme
 
 ## Things I would have done better if I had more time
 
-1. I would improve styling and make better UX for handling user inputs errors
+1. I would improve styling and make better UX and logic for handling user inputs errors
 2. I would add more Validations for the user Inputs
 
 ## Deployment
 
-https://nextdev-gilad.herokuapp.com/
+https://taskdevs.herokuapp.com/
 
 ## Author
 

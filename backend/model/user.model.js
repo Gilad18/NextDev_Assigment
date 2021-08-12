@@ -65,6 +65,7 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
+  //Hashing passwords on create user
   const user = this;
 
   if (user.isModified("password")) {
