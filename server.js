@@ -40,5 +40,5 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.listen(process.env.PORT || port, () => {
-  return console.log(`application start`);
+  console.log(`application start`);
 });
