@@ -82,10 +82,7 @@ export default function UserProfile() {
         },
       });
       dispatch(newUser(attempUpdate.data.updatedUser));
-      notification(
-        `Details were succesfuly updated!`,
-        toast.POSITION.TOP_CENTER
-      );
+      notification(attempUpdate.data.succes, toast.POSITION.TOP_CENTER);
     } catch (err) {
       console.log(err);
     }

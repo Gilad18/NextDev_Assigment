@@ -12,6 +12,7 @@ import API from "API/api";
 import { toast } from "react-toastify";
 import { notification } from "../../Toastify/toastify";
 import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const styles = {
   pageContainer: {
@@ -29,6 +30,8 @@ export default function LoginToAccount({ props }) {
   const dispatch = useDispatch();
   const [userInputs, setUserInputs] = useState({ userName: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   toast.configure();
 
   const handleInputChange = (property, value) => {
@@ -41,11 +44,13 @@ export default function LoginToAccount({ props }) {
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const attempLogin = await API("/login", {
         method: "post",
         data: { ...userInputs },
       });
       if (attempLogin.data) {
+        setLoading(false);
         notification(
           `Hey ${attempLogin.data.user.firstName}, great to see you again`,
           toast.POSITION.TOP_CENTER
@@ -57,6 +62,7 @@ export default function LoginToAccount({ props }) {
         });
       }
     } catch (err) {
+      setLoading(false);
       setErrorMessage(err.response.data);
     }
   };
@@ -107,6 +113,7 @@ export default function LoginToAccount({ props }) {
             Log In
           </Button>
           <p>{errorMessage}</p>
+          {loading && <CircularProgress />}
         </GridItem>
       </GridContainer>
     </div>

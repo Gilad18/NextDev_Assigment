@@ -4,6 +4,7 @@ import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import auth from "../auth";
 import Button from "../../../components/CustomButtons/Button";
 import { useDispatch } from "react-redux";
@@ -43,6 +44,7 @@ export default function CreateAccount({ props }) {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   toast.configure();
 
@@ -65,11 +67,13 @@ export default function CreateAccount({ props }) {
     if (userInputs.password !== userInputs.passwordConfirm)
       return setErrorMessage("Passwords are not matched");
     try {
+      setLoading(true);
       const newAccount = await API("/newUser", {
         method: "post",
         data: { ...userInputs },
       });
       if (newAccount.data) {
+        setLoading(false);
         notification(
           `Welcome aboard ${newAccount.data.newUser.firstName}, We so happy to have you here!`,
           toast.POSITION.TOP_CENTER
@@ -81,6 +85,7 @@ export default function CreateAccount({ props }) {
         });
       }
     } catch (error) {
+      setLoading(false);
       setErrorMessage(error.response.data);
     }
   };
@@ -218,6 +223,7 @@ export default function CreateAccount({ props }) {
             Create Account
           </Button>
           <p>{errorMessage}</p>
+          {loading && <CircularProgress />}
         </GridItem>
       </GridContainer>
     </div>

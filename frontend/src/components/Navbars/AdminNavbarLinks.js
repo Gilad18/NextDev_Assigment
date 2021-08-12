@@ -19,8 +19,10 @@ import Search from "@material-ui/icons/Search";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import auth from "../../views/Login/auth";
-import { createBrowserHistory } from "history";
+import { useHistory } from "react-router-dom";
 import API from "../../API/api";
+import { toast } from "react-toastify";
+import { notification } from "../../views/Toastify/toastify";
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
@@ -28,10 +30,12 @@ const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks() {
   const classes = useStyles();
-  const history = createBrowserHistory();
+  const history = useHistory();
   const token = localStorage.getItem("token");
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
+
+  toast.configure();
 
   const handleClickNotification = (event) => {
     if (openNotification && openNotification.contains(event.target)) {
@@ -66,9 +70,14 @@ export default function AdminNavbarLinks() {
     } catch (err) {
       console.log(err);
     } finally {
-      //toastify with the succes message from the JSON
+      notification(
+        `You are logged out, can't wait to see you again`,
+        toast.POSITION.TOP_CENTER
+      );
       localStorage.setItem("token", "");
-      auth.logout(() => history.push("/"));
+      setTimeout(() => {
+        auth.logout(() => history.push("/"));
+      }, 3000);
     }
   };
   return (

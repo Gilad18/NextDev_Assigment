@@ -27,7 +27,7 @@ export const Login = (props) => {
   return (
     <div className={classes.container}>
       <GridItem>
-        {!hasAnAccount ? (
+        {hasAnAccount ? (
           <>
             <p>
               Alreday have an account? Click{" "}

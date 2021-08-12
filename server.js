@@ -8,7 +8,7 @@ const app = express();
 const path = require("path");
 
 app.use(cors());
-const port = process.env.PORT || 5001;
+const port = 5001;
 
 const serverRoute = require("./backend/routes/routes");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,20 +31,14 @@ mongoose
   });
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "./frontend/build")));
+  app.use(express.static("frontend/build"));
 
-  app.get("*", function (_, res) {
-    res.sendFile(
-      path.join(__dirname, "./frontend/build/index.html"),
-      function (err) {
-        if (err) {
-          res.status(500).send(err);
-        }
-      }
-    );
+  const path = require("path");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
   });
 }
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   return console.log(`application start`);
 });
