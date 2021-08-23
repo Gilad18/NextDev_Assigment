@@ -15,6 +15,10 @@ const createNewUser = async (req, res) => {
 
   if (password !== passwordConfirm) throw new Error("pasword are not matched");
 
+  if (await isUserExist(userName)) {
+    return res.status(400).send("user name already exist");
+  }
+
   const newUser = new Users({
     userName,
     email,
@@ -35,6 +39,11 @@ const createNewUser = async (req, res) => {
   } catch (error) {
     res.status(400).send(error.message);
   }
+};
+
+const isUserExist = async (userName) => {
+  const exist = await Users.find({ userName });
+  return exist.length > 0 ? true : false;
 };
 
 const login = async (req, res) => {
