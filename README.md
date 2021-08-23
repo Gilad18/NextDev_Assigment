@@ -7,6 +7,8 @@ NextDev Assigment
 I had 2 days to work on a challenging task by NextDev.
 The task was to create an authentication process before the existing content of the app.
 
+![nextDevSS](https://user-images.githubusercontent.com/77917272/129183975-d640343f-0603-45f9-8a5c-d7a605349e79.PNG)
+
 ## Project timeline
 
 Server Side:
@@ -48,3 +50,6 @@ https://taskdevs.herokuapp.com/
 ## Author
 
 - **Gilad Yefet** - - [PurpleBooth](https://github.com/gilad18)
+
+![nextdev2](https://user-images.githubusercontent.com/77917272/129183989-5fefad44-10ed-40c8-b446-817347c8a5c1.PNG)
+
